@@ -12,6 +12,9 @@ router.get("/test", (req, res) =>
 // Get all companies
 router.get("/", companyController.GetAll);
 
+// Get one company
+router.get("/:id", companyController.GetOneCompany);
+
 // Register comapny
 router.post("/", companyController.RegisterCompany);
 

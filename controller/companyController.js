@@ -22,6 +22,21 @@ exports.GetAll = (req, res) => {
     .catch(err => console.log(err));
 };
 
+// Get One Company
+exports.GetOneCompany = (req, res) => {
+  const errors = {};
+  CompanyProfile.findOne({ company: req.params.id })
+    .populate("company", ["email", "cvr"])
+    .then(companyProfile => {
+      if (!companyProfile) {
+        errors.companyProfile = "No company profile found";
+        return res.status(404).json(errors);
+      }
+      res.json(companyProfile);
+    })
+    .catch(err => console.log(err));
+};
+
 // Register new company
 exports.RegisterCompany = (req, res) => {
   const { errors, isValid } = validateCompanyRegister(req.body);
