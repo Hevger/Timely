@@ -108,15 +108,18 @@ exports.CreateBooking = async (req, res) => {
 
   Employee.findById(req.body.employee).then(employee => {
     // Check if booking is in past
-    let now = new Date();
-    if (toDate(req.body.date) < now) {
-      return res.json({
-        error: "you can't book in past"
-      });
-    }
 
     companyId = employee.company;
     Hours.findOne({ company: companyId }).then(hours => {
+      let now = new Date();
+      now = moment(now).format("MM/DD/YYYY");
+      bookingDate = moment(toDate(req.body.date)).format("MM/DD/YYYY");
+      if (bookingDate < now) {
+        return res.json({
+          error: "you can't book in past"
+        });
+      }
+
       if (hours.hours[0][dayName.toString()].closed) {
         return res.json({
           error: "is closed on selected date"
@@ -145,6 +148,16 @@ exports.CreateBooking = async (req, res) => {
     });
   });
 
+  // save
+  saveBooking = () => {
+    Employee.findById(req.body.employee)
+      .then(employee => {
+        newBooking.company = employee.company;
+        newBooking.save().then(booking => res.json(booking));
+      })
+      .catch(err => console.log(err));
+  };
+
   // Check if booking is overlapping
   Booking.find({
     employee: req.body.employee,
@@ -154,17 +167,16 @@ exports.CreateBooking = async (req, res) => {
       var range1 = moment.range(booking.startTime, booking.endTime);
       var range2 = moment.range(newBooking.startTime, newBooking.endTime);
       if (range1.overlaps(range2)) {
-        return res.json({
-          error: "this booking is overlapping another booking"
-        });
+        errors.overlapped = "this booking is overlapping another booking";
       }
     });
     // Find company by employee and add to booking
-    Employee.findById(req.body.employee)
-      .then(employee => {
-        newBooking.company = employee.company;
-        newBooking.save().then(booking => res.json(booking));
-      })
-      .catch(err => console.log(err));
+    if (errors.overlapped == undefined) {
+      saveBooking();
+    } else {
+      return res.json({
+        error: "this booking is overlapping another booking"
+      });
+    }
   });
 };
