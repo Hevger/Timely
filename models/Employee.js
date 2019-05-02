@@ -7,21 +7,12 @@ const EmployeeSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "company"
   },
-  companyProfile: {
-    type: Schema.Types.ObjectId,
-    ref: "companyProfiles"
-  },
   name: {
     type: String,
     require: true
   },
-  photo: {
-    type: String,
-    require: true
-  },
   description: {
-    type: String,
-    require: true
+    type: String
   }
 });
 

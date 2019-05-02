@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 // Load Routes
 const companiesRoute = require("./routes/api/companiesRoute");
+const bookingRoute = require("./routes/api/bookingRoute");
 
 // DB Config
 const db = require("./config/keys").mongoURI;
@@ -28,6 +29,7 @@ require("./config/passport.js")(passport);
 
 // Use routes
 app.use("/api/company", companiesRoute);
+app.use("/api/booking", bookingRoute);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
