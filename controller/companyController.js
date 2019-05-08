@@ -16,6 +16,7 @@ const validateLoginInput = require("../validation/validateLoginInput");
 const validateEmployeeInput = require("../validation/validateEmployeeInput");
 const validateServiceInput = require("../validation/validateServiceInput");
 const hoursValidation = require("../validation/hoursValidation");
+const isEmpty = require("../validation/is-empty");
 
 // Login
 exports.Login = (req, res) => {
@@ -63,6 +64,21 @@ exports.Login = (req, res) => {
       }
     });
   });
+};
+
+// Get current company
+exports.getLoggedInCompany = (req, res) => {
+  const errors = {};
+  CompanyProfile.findOne({ company: req.user.id })
+    .populate("company", ["email", "cvr"])
+    .then(companyProfile => {
+      if (!companyProfile) {
+        errors.companyProfile = "No company profile found";
+        return res.status(404).json(errors);
+      }
+      res.json(companyProfile);
+    })
+    .catch(err => console.log(err));
 };
 
 // Get All
@@ -174,18 +190,22 @@ exports.UpdateCompany = (req, res) => {
     return res.status(404).json(errors);
   }
 
-  // Encrypt password
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(req.body.password, salt, (err, hash) => {
-      if (err) throw err;
-      hashed = hash;
+  if (!isEmpty(req.body.password)) {
+    // Encrypt password
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if (err) throw err;
+        hashed = hash;
+      });
     });
-  });
+  }
 
   Company.findById(req.params.id)
     .then(company => {
       company.email = req.body.email;
-      company.password = hashed;
+      if (!isEmpty(hashed)) {
+        company.password = hashed;
+      }
 
       CompanyProfile.findOne({ company: req.params.id }).then(
         companyProfile => {
@@ -194,6 +214,7 @@ exports.UpdateCompany = (req, res) => {
           companyProfile.zipcode = req.body.zipcode;
           companyProfile.city = req.body.city;
           companyProfile.phone = req.body.phone;
+          companyProfile.email = req.body.email2;
           company
             .save()
             .then(companyProfile.save().then(res.json(companyProfile)));

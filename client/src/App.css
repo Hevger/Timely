@@ -1,0 +1,38 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.maxWidth {
+  max-width: 150px;
+}
+
+.hvordan {
+  font-size: 33px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.eighteenRem {
+  width: 18rem;
+}
+
+.companyImage {
+  height: 100%;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}

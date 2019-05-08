@@ -1,0 +1,5 @@
+export const GET_ERRORS = "GET_ERRORS";
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export const COMPANY_LOADING = "COMPANY_LOADING";
+export const GET_COMPANY = "GET_COMPANY";
+export const CLEAR_COMPANY = "CLEAR_COMPANY";

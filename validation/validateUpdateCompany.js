@@ -6,7 +6,6 @@ module.exports = function validateUpdateCompany(data) {
 
   data.email = !isEmpty(data.email) ? data.email : "";
   data.password = !isEmpty(data.password) ? data.password : "";
-  data.password2 = !isEmpty(data.password2) ? data.password2 : "";
   data.name = !isEmpty(data.name) ? data.name : "";
   data.address = !isEmpty(data.address) ? data.address : "";
   data.zipcode = !isEmpty(data.zipcode) ? data.zipcode : "";

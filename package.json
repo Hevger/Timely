@@ -4,6 +4,11 @@
   "description": "a time booking web app",
   "main": "app.js",
   "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +18,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
+    "concurrently": "^4.1.0",
     "moment": "^2.24.0",
     "moment-range": "^4.0.2",
     "mongoose": "^5.5.1",

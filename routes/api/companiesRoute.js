@@ -9,6 +9,14 @@ const companyController = require("../../controller/companyController");
 router.get("/test", (req, res) =>
   res.json({ message: "Testing the company routes" })
 );
+
+// Get current company
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  companyController.getLoggedInCompany
+);
+
 // Get all companies
 router.get("/", companyController.GetAll);
 
