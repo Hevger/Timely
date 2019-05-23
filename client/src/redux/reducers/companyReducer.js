@@ -1,32 +1,24 @@
-import {
-  GET_COMPANY,
-  COMPANY_LOADING,
-  CLEAR_COMPANY
-} from "../actions/actionTypes";
+import { GET_COMPANIES, COMPANIES_LOADING } from "../actions/actionTypes";
 
 const initialState = {
-  company: null,
+  companies: [],
   loading: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case COMPANY_LOADING:
+    case COMPANIES_LOADING:
       return {
         ...state,
         loading: true
       };
-    case GET_COMPANY:
+    case GET_COMPANIES:
       return {
         ...state,
-        company: action.payload,
+        companies: action.payload,
         loading: false
       };
-    case CLEAR_COMPANY:
-      return {
-        ...state,
-        company: null
-      };
+
     default:
       return state;
   }

@@ -18,8 +18,10 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
+    if (this.props.auth.isAuthenticated === false) {
+      this.props.history.push("/login");
+    } else {
+      this.props.history.push("/login");
     }
   }
 

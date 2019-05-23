@@ -88,7 +88,7 @@ exports.CreateBooking = async (req, res) => {
   newBooking.services = myServices;
 
   // Set end time (end time is calculated by start time + time of all services)
-  let getStartTimeMinuts = newBooking.startTime.getUTCMinutes().toString();
+  let getStartTimeMinuts = newStartTime.getUTCMinutes().toString();
   let total = parseInt(getStartTimeMinuts) + parseInt(newBooking.time);
 
   newBooking.endTime = endTime.setUTCMinutes(total);
@@ -179,4 +179,42 @@ exports.CreateBooking = async (req, res) => {
       });
     }
   });
+};
+
+// GET Bookings by employee ID
+exports.GetBookingsByEmployee = (req, res) => {
+  const errors = {};
+  Booking.find({ employee: req.params.id })
+    .then(bookings => {
+      if (!bookings) {
+        errors.bookings = "No bookings found";
+        return res.status(404).json(errors);
+      }
+      res.json(bookings);
+    })
+    .catch(err => console.log(err));
+};
+
+// Calculate services time in total
+exports.CalculateServices = async (req, res) => {
+  const errors = {};
+  let total = 0;
+  if (req.body.selectedServices == null) {
+    return res.status(404).json({ error: "Services is required" });
+  }
+  const servicesString = req.body.selectedServices.join(",");
+  const servicesArray = servicesString.toString().split(",");
+  for (let i = 0; i < servicesArray.length; i++) {
+    if (!mongoose.Types.ObjectId.isValid(servicesArray[i])) {
+      return res.status(400).json({ error: "Invalid object id" });
+    }
+
+    const service = await Service.findById(servicesArray[i]);
+    if (!service) {
+      return res.status(404).json({ error: "Service not found" });
+    } else {
+      total += service.time;
+    }
+  }
+  res.json({ totalTime: total });
 };

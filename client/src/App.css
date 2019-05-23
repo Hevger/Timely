@@ -1,3 +1,6 @@
+@import "~@fullcalendar/core/main.css";
+@import "~@fullcalendar/daygrid/main.css";
+
 html {
   position: relative;
   min-height: 100%;
@@ -35,4 +38,18 @@ body {
   height: 100%;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+}
+
+.fc-time-grid .fc-slats td {
+  height: 60px !important;
+}
+
+.fc-title {
+  font-weight: bold;
+  font-size: 13px !important;
+  letter-spacing: 1px;
+}
+
+.fc-time-grid .fc-slats td {
+  height: 10px !important;
 }

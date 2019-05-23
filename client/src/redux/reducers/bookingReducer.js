@@ -1,32 +1,37 @@
 import {
-  GET_COMPANY,
-  COMPANY_LOADING,
-  CLEAR_COMPANY
+  BOOKINGS_LOADING,
+  GET_BOOKINGS,
+  CALCULATE_SERVICES
 } from "../actions/actionTypes";
 
 const initialState = {
-  company: null,
+  bookings: [],
+  currentEmployee: null,
+  totalTime: null,
   loading: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case COMPANY_LOADING:
+    case BOOKINGS_LOADING:
       return {
         ...state,
         loading: true
       };
-    case GET_COMPANY:
+
+    case GET_BOOKINGS:
       return {
         ...state,
-        company: action.payload,
+        bookings: action.payload,
         loading: false
       };
-    case CLEAR_COMPANY:
+
+    case CALCULATE_SERVICES:
       return {
         ...state,
-        company: null
+        totalTime: action.payload
       };
+
     default:
       return state;
   }

@@ -97,6 +97,13 @@ class Header extends React.Component {
           Booking
         </NavLink>
         <NavLink
+          to="/dashboard/openingHours"
+          className="nav-item nav-link"
+          activeStyle={activeStyle}
+        >
+          Åbningstider
+        </NavLink>
+        <NavLink
           to="/dashboard/profile"
           className="nav-item nav-link"
           activeStyle={activeStyle}

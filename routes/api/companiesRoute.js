@@ -97,6 +97,9 @@ router.delete(
   companyController.DeleteService
 );
 
+// Get Opening Hours
+router.get("/:id/hours", companyController.GetHours);
+
 // Update Opening Hours
 router.post(
   "/:id/hours",

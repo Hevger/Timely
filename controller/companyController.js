@@ -84,7 +84,8 @@ exports.getLoggedInCompany = (req, res) => {
 // Get All
 exports.GetAll = (req, res) => {
   const errors = {};
-  Company.find({}, { cvr: 1, email: 1 })
+  CompanyProfile.find()
+    .populate("company", ["email", "cvr"])
     .then(companies => {
       if (!companies) {
         errors.nocompanies = "No companies found";
@@ -155,8 +156,48 @@ exports.RegisterCompany = (req, res) => {
                     email: json.email,
                     phone: json.phone
                   });
+
+                  let defaultHours = {
+                    monday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    },
+                    tuesday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    },
+                    wednesday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    },
+                    thursday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    },
+                    friday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    },
+                    saturday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    },
+                    sunday: {
+                      closed: true,
+                      start: "",
+                      end: ""
+                    }
+                  };
+
                   const companyHours = new Hours({
-                    company: companyId
+                    company: companyId,
+                    hours: defaultHours
                   });
                   newProfile.save().then(newCompanyProfile => {
                     companyHours.save().then(res.json(newCompanyProfile));
@@ -246,8 +287,8 @@ exports.GetAllEmployee = (req, res) => {
   Employee.find({ company: req.params.id })
     .then(employees => {
       if (employees.length == 0) {
-        errors.employees = "No employees found";
-        return res.json(errors);
+        errors.employees = "No employees found, please add some";
+        return res.status(404).json(errors);
       }
       res.json(employees);
     })
@@ -331,10 +372,9 @@ exports.UpdateEmployee = (req, res) => {
 
   Employee.findById(req.params.id)
     .then(employee => {
-      if (req.company != req.user.id) {
-        return res.status(401).json({
-          message: "You don't have permission to update this employee"
-        });
+      if (employee.company != req.user.id) {
+        errors.message = "You don't have permission to update this employee";
+        return res.status(401).json(errors);
       }
 
       if (!employee) {
@@ -426,8 +466,8 @@ exports.GetAllServices = (req, res) => {
   Service.find({ company: req.params.id })
     .then(services => {
       if (services.length == 0) {
-        errors.services = "No services found";
-        return res.json(errors);
+        errors.services = "No services found, please add some";
+        return res.status(404).json(errors);
       }
       res.json(services);
     })
@@ -459,12 +499,10 @@ exports.DeleteService = (req, res) => {
 // Update Opening Hours
 exports.UpdateHours = (req, res) => {
   const { errors, isValid } = hoursValidation(req.body);
-
   // Check Validation
   if (!isValid) {
     return res.status(404).json(errors);
   }
-
   Hours.findOne({ company: req.params.id })
     .then(companyHours => {
       if (companyHours.company != req.user.id) {
@@ -521,6 +559,62 @@ exports.UpdateHours = (req, res) => {
       ];
       companyHours.hours = hours;
       companyHours.save().then(res.json(companyHours));
+    })
+    .catch(err => console.log(err));
+};
+
+// Get opening hours
+exports.GetHours = (req, res) => {
+  const errors = {};
+
+  Hours.findOne({ company: req.params.id })
+    .then(companyHours => {
+      if (!companyHours) {
+        errors.noProfile = "No company hours found";
+        return res.status(404).json(errors);
+      }
+
+      // Create opening hours object
+      const hours = [
+        {
+          monday: {
+            start: companyHours.mondayStart,
+            end: companyHours.mondayEnd,
+            closed: companyHours.mondayClosed
+          },
+          tuesday: {
+            start: companyHours.tuesdayStart,
+            end: companyHours.tuesdayEnd,
+            closed: companyHours.tuesdayClosed
+          },
+          wednesday: {
+            start: companyHours.wednesdayStart,
+            end: companyHours.wednesdayEnd,
+            closed: companyHours.wednesdayClosed
+          },
+          thursday: {
+            start: companyHours.thursdayStart,
+            end: companyHours.thursdayEnd,
+            closed: companyHours.thursdayClosed
+          },
+          friday: {
+            start: companyHours.fridayStart,
+            end: companyHours.fridayEnd,
+            closed: companyHours.fridayClosed
+          },
+          saturday: {
+            start: companyHours.saturdayStart,
+            end: companyHours.saturdayEnd,
+            closed: companyHours.saturdayClosed
+          },
+          sunday: {
+            start: companyHours.sundayStart,
+            end: companyHours.sundayEnd,
+            closed: companyHours.sundayClosed
+          }
+        }
+      ];
+      res.json(companyHours);
     })
     .catch(err => console.log(err));
 };

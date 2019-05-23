@@ -6,7 +6,7 @@ import Loading from "../components/layout/Loading";
 import { getEmployees } from "../redux/actions/companyActions";
 import { Link } from "react-router-dom";
 
-class Dashboard extends React.Component {
+class Employees extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,10 +51,10 @@ class Dashboard extends React.Component {
           <h5 className="card-title">{item.name}</h5>
           <p className="card-text">{item.description}</p>
           <Link
-            to={"/dashboard/bookingOverview/" + item._id}
+            to={"/dashboard/epmployee/" + item._id}
             className="btn btn-primary"
           >
-            Booking oversigt
+            Rediger
           </Link>
         </div>
       </div>
@@ -80,7 +80,15 @@ class Dashboard extends React.Component {
       <div className="container mt-5 mb-5">
         <div className="row">
           <div className="col-sm-12">
-            <h2 className="hvordan display-4 text-left mb-4">Dashboard</h2>
+            <h2 className="hvordan display-4 text-left mb-4">Medarbejdere</h2>
+            <div className="text-right">
+              <Link to="/dashboard/addEmployee">
+                <button type="button" className="btn btn-success">
+                  Tilføj medarbejdere
+                </button>
+              </Link>
+            </div>
+
             {dashboardContent}
           </div>
         </div>
@@ -89,7 +97,7 @@ class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
+Employees.propTypes = {
   getEmployees: PropTypes.func.isRequired,
   employees: PropTypes.object.isRequired,
   company: PropTypes.object.isRequired,
@@ -105,4 +113,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { getEmployees }
-)(withRouter(Dashboard));
+)(withRouter(Employees));

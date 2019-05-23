@@ -4,15 +4,15 @@ import { withRouter } from "react-router-dom";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import {
-  getCompany,
-  updateCompanyProfile
+  updateCompanyProfile,
+  getCompany
 } from "../redux/actions/companyActions";
 import Loading from "../components/layout/Loading";
 import isEmpty from "../validation/is-empty";
 
 class Profile extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       name: "",
       address: "",
@@ -63,8 +63,8 @@ class Profile extends React.Component {
     }
   }
 
-  onSubmit(x) {
-    x.preventDefault();
+  onSubmit(e) {
+    e.preventDefault();
 
     const companyProfile = {
       id: this.state.companyId,

@@ -60,5 +60,4 @@ export const logoutCompany = () => dispatch => {
   setAuthToken(false);
   // Set current company to {} to set isAuthenticated to false
   dispatch(setCurrentUser({}));
-  window.location.href = "/login";
 };
